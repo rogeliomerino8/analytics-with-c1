@@ -1,4 +1,3 @@
-import { CardInfo } from "@/app/page";
 import { ArrowRightIcon } from "lucide-react";
 import { AnalyticsCard } from "./AnalyticsCard";
 import Sidebar from "./Sidebar";
@@ -6,21 +5,21 @@ import Header from "./Header";
 import { Loader } from "./Loader";
 import { Button } from "@crayonai/react-ui";
 import { AnimatePresence, m } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { AppStateContext } from "../context/AppStateContext";
 
 interface DashboardScreenProps {
-  cardInfo: CardInfo[];
   loading: boolean;
   isPromptsFetchError?: boolean;
 }
 
 interface CardStreamingState {
+  id: string; // prompt id
   prompt: string;
   status: "streaming" | "done";
 }
 
 export const DashboardScreen = ({
-  cardInfo,
   loading,
   isPromptsFetchError,
 }: DashboardScreenProps) => {
@@ -28,35 +27,48 @@ export const DashboardScreen = ({
     CardStreamingState[]
   >([]);
 
+  const appState = useContext(AppStateContext);
+
+  const latestCards =
+    appState.conversation[appState.conversation.length - 1].cards;
+
   // state to set the initial streaming state for all cards
   useEffect(() => {
-    if (!cardInfo || cardInfo.length === 0) return;
+    if (!latestCards || latestCards.length === 0) return;
     if (cardStreamingStates.length > 0) return; // Only populate once
 
     setCardStreamingStates(
-      cardInfo.map((card) => ({
-        prompt: card.text,
+      latestCards.map((card) => ({
+        id: card.id,
+        prompt: card.prompt,
         status: "streaming" as const,
       }))
     );
-  }, [cardInfo, cardStreamingStates]);
+  }, [latestCards, cardStreamingStates]);
 
   const markCardAsDone = useCallback(
-    (prompt: string) => {
+    (promptId: string, c1Response: string) => {
       setCardStreamingStates((prev) =>
         prev.map((card) =>
-          card.prompt === prompt ? { ...card, status: "done" } : card
+          card.id === promptId ? { ...card, status: "done" } : card
         )
       );
+      appState.updateCardUI(promptId, c1Response);
     },
-    [setCardStreamingStates]
+    [appState]
   );
 
   const allCardsDoneStreaming = cardStreamingStates.every(
     (card) => card.status === "done"
   );
 
-  const noResponsesAvailable = cardInfo.length === 0 && !isPromptsFetchError;
+  useEffect(() => {
+    if (allCardsDoneStreaming) {
+      appState.updateStatus("fulfilled");
+    }
+  }, [allCardsDoneStreaming, latestCards, appState]);
+
+  const noResponsesAvailable = latestCards.length === 0 && !isPromptsFetchError;
 
   return (
     <m.div
@@ -85,10 +97,10 @@ export const DashboardScreen = ({
             ) : (
               <div className="flex flex-col gap-4 pt-[60px] pb-[100px] max-w-full">
                 <div className="columns-1 xl:columns-2 gap-4">
-                  {cardInfo.map((card) => (
-                    <div key={card.text} className="mb-4 break-inside-avoid">
+                  {latestCards.map((card) => (
+                    <div key={card.id} className="mb-4 break-inside-avoid">
                       <AnalyticsCard
-                        prompt={card.text}
+                        card={card}
                         markCardAsDone={markCardAsDone}
                       />
                     </div>

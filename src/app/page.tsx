@@ -2,25 +2,27 @@
 
 import { ThemeProvider } from "@crayonai/react-ui";
 import "@crayonai/react-ui/styles/index.css";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { InputScreen } from "./components/InputScreen";
 import { DashboardScreen } from "./components/DashboardScreen";
 import { InputField } from "./components/InputField/InputField";
 import { AnimatePresence, domAnimation, LazyMotion } from "framer-motion";
 import Header from "./components/Header";
+import { AppStateContext } from "./context/AppStateContext";
 
-export interface CardInfo {
+export interface PromptInfo {
+  id: string;
   text: string; // card prompt
 }
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [cards, setCards] = useState<CardInfo[]>([]);
   const [isPromptsFetchError, setIsPromptsFetchError] = useState(false);
   const [prompt, setPrompt] = useState("");
   const titleRef = useRef<HTMLDivElement>(null);
   const [inputTop, setInputTop] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const appState = useContext(AppStateContext);
 
   useEffect(() => {
     const updateInputPosition = () => {
@@ -47,8 +49,8 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify({ prompt }),
       });
-      const data: { prompts: CardInfo[] } = await response.json();
-      setCards(data.prompts);
+      const data: { prompts: PromptInfo[] } = await response.json();
+      appState.addPrompts(data.prompts);
     } catch (error) {
       console.error(
         "Something went wrong while fetching or parsing the list of prompts: ",
@@ -65,9 +67,10 @@ export default function Home() {
       <ThemeProvider mode="light">
         <Header />
         <InputField
-          handleSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-            generateCardsHandler(e, prompt)
-          }
+          handleSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+            appState.addQuery(prompt);
+            generateCardsHandler(e, prompt);
+          }}
           value={prompt}
           onChange={setPrompt}
           placeholder="Search anything..."
@@ -84,7 +87,6 @@ export default function Home() {
           ) : (
             <DashboardScreen
               key="dashboard-screen"
-              cardInfo={cards}
               loading={loading}
               isPromptsFetchError={isPromptsFetchError}
             />

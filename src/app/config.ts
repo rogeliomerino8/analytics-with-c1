@@ -30,7 +30,7 @@ export const config: Config = {
   fetchMcpClient: async () => {
     const mcpClient = await connectToMCPServer("uv", [
       "--directory",
-      "/Users/<username>/Downloads/financial-datasets",
+      "/Users/hrijulthesys/Downloads/financial-datasets",
       "run",
       "server.py",
     ]);
