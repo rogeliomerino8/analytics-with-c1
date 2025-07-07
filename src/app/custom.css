@@ -1,0 +1,106 @@
+.c1-chat-test {
+  margin-left: auto;
+  width: 720px;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-container {
+  padding: 16px;
+  padding-bottom: 0;
+  background: #FFFFFF;
+  padding-top: 80px;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-scroll-area {
+  padding: 0px;
+  padding-bottom: 16px;
+  overflow: hidden;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-message-assistant + .crayon-copilot-shell-thread-message-user {
+  border-radius: 16px 16px 0px 0px;
+  overflow: hidden;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-message-assistant__content {
+  padding: 16px 8px 16px 8px;
+  background: white;
+  border-radius: 0px 0px 16px 16px;
+  overflow: hidden;
+}
+
+
+.c1-chat-test .crayon-copilot-shell-thread-message-user {
+  padding: 16px 8px 16px 8px;
+  justify-content: flex-start;
+  background: var(--crayon-chat-container-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border: var(--crayon-stroke-default) 1px solid;
+  border-width: 0 0 1px 0;
+  /* border-radius: 20px 20px 0 0; */
+  background: white;
+  overflow: hidden;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-message-user__content {
+  background: transparent;
+  border: none;
+  color: var(--crayon-primary-text);
+  height: fit-content;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.25;
+  padding: 0;
+}
+
+.c1-chat-test .crayon-card-card {
+  padding: 0;
+  border-radius: unset;
+  border: unset;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-messages {
+  margin: 0;
+}
+
+.c1-chat-test .crayon-copilot-shell-thread-messages > *:last-child {
+  height:auto;
+}
+
+.c1-chat-test .crayon-header {
+  display: none;
+}
+
+.crayon-follow-up-item {
+  text-align: left;
+}
+
+.message-loader {
+  padding: 16px;
+}
+
+.message-loader-text {
+  color: transparent;
+  background: linear-gradient(
+      135deg,
+      #FFF,
+      #454545,
+      #FFF
+  );
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer 5s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+      background-position: 200% 0;
+  }
+  100% {
+      background-position: -200% 0;
+  }
+}

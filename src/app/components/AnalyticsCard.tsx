@@ -1,32 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useUIState } from "../hooks/useUIState";
 import { C1Component } from "@thesysai/genui-sdk";
 
 interface AnalyticsCardProps {
   prompt: string;
-  markCardAsDone: (prompt: string) => void;
+  updatePrompt: (prompt: string) => void;
+  markStreamingDone: (c1Response: string) => void;
 }
 
-export const AnalyticsCard = ({
-  prompt,
-  markCardAsDone,
-}: AnalyticsCardProps) => {
+export const AnalyticsCard = ({ prompt, updatePrompt, markStreamingDone }: AnalyticsCardProps) => {
   const { state, actions } = useUIState();
+  const lastPrompt = useRef<string | null>(null);
 
   useEffect(() => {
     if (state.c1Response && state.c1Response.length > 0 && !state.isLoading) {
-      markCardAsDone(prompt);
+      markStreamingDone(state.c1Response);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [markCardAsDone, state.c1Response, state.isLoading]);
+  });
 
   useEffect(() => {
-    if (!prompt) return;
+    if (!prompt || prompt === lastPrompt.current) return;
+
     actions.makeApiCall(prompt);
+    lastPrompt.current = prompt;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prompt]);
 
   return (
-    <C1Component c1Response={state.c1Response} isStreaming={state.isLoading} />
+    <C1Component
+      c1Response={state.c1Response}
+      isStreaming={state.isLoading}
+      updateMessage={(message) => actions.setC1Response(message)}
+      onAction={({ llmFriendlyMessage, humanFriendlyMessage }) => {
+        if (!state.isLoading) {
+          updatePrompt(humanFriendlyMessage);
+          actions.makeApiCall(llmFriendlyMessage);
+        }
+      }}
+    />
   );
 };

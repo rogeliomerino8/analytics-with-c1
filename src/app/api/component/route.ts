@@ -1,11 +1,19 @@
 import { NextRequest } from "next/server";
 import OpenAI from "openai";
-import { systemPrompt } from "./systemPrompt";
 import { transformStream } from "@crayonai/stream";
+import { getMessageStore } from "./messageStore";
+import { config } from "@/app/config";
 
 const client = new OpenAI({
-  baseURL: "https://api.thesys.dev/v1/embed",
+  baseURL: "http://localhost:3102/v1/embed",
   apiKey: process.env.THESYS_API_KEY,
+});
+
+const messageStore = getMessageStore();
+
+messageStore.addMessage({
+  role: "system",
+  content: config.systemPrompt,
 });
 
 export async function POST(req: NextRequest) {
@@ -21,23 +29,49 @@ export async function POST(req: NextRequest) {
     return new Response("No prompt provided", { status: 400 });
   }
 
-  const llmStream = await client.chat.completions.create({
-    model: "c1-nightly",
-    messages: [
-      {
-        // Add the system prompt to provide appropriate instructions to the agent on how to generate the response and what UI constraints to consider.
-        role: "system",
-        content: systemPrompt,
-      },
-
-      { role: "user", content: prompt },
-    ],
-    stream: true,
+  messageStore.addMessage({
+    role: "user",
+    content: prompt,
   });
+
+  const tools = await config.fetchTools?.();
+  let llmResponse;
+
+  if (tools) {
+    llmResponse = client.beta.chat.completions.runTools({
+      model: "c1-nightly",
+      messages: messageStore.getOpenAICompatibleMessageList(),
+      stream: true,
+      tools,
+    });
+
+    llmResponse.on("message", (event) => messageStore.addMessage(event));
+    llmResponse.on("finalMessage", () => {
+      console.log('message history: ', messageStore.messages)
+    });
+  } else {
+    llmResponse = client.chat.completions.create({
+      model: "c1-nightly",
+      messages: messageStore.getOpenAICompatibleMessageList(),
+      stream: true,
+    });
+  }
+
+  const llmStream = await llmResponse;
 
   const responseStream = transformStream(
     llmStream,
-    (chunk) => chunk.choices[0].delta.content
+    (chunk) => chunk.choices[0].delta.content,
+    {
+      onEnd: ({ accumulated }) => {
+        if (!accumulated || tools) return;
+
+        messageStore.addMessage({
+          role: "assistant",
+          content: accumulated.join(""),
+        });
+      },
+    }
   ) as ReadableStream<string>;
 
   return new Response(responseStream, {

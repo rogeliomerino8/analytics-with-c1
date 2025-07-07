@@ -1,53 +1,52 @@
 import React from "react";
-import Image from "next/image";
 import { Button } from "@crayonai/react-ui";
-import { Github, ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft, Home } from "lucide-react";
 
+interface HeaderProps {
+  canGoToNext: boolean;
+  goToNext: () => void;
+  canGoToPrevious: boolean;
+  goToPrevious: () => void;
+  switchToNewThread: () => void;
+}
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({
+  canGoToNext,
+  goToNext,
+  canGoToPrevious,
+  goToPrevious,
+  switchToNewThread,
+}) => {
   return (
-    <div className="fixed top-0 left-0 w-full z-30 bg-container">
-      <div className="flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/thesys-navbar.svg"
-            alt="Chat with C1"
-            width={36}
-            height={36}
-            className="rounded-lg"
-          />
-          <div className="flex items-center">
-            <h1 className="text-primary">
-              Analytics + C1 <span className="text-secondary">by thesys</span>
-            </h1>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="secondary"
-            size="medium"
-            onClick={() =>
-              window.open(
-                "https://github.com/thesysdev/analytics-with-c1",
-                "_blank"
-              )
-            }
-          >
-            <Github className="h-4 w-4" />
-            <span className="hidden md:block">Github</span>
-          </Button>
-          <Button
-            variant="secondary"
-            size="medium"
-            onClick={() =>
-              window.open("https://docs.thesys.dev/welcome", "_blank")
-            }
-          >
-            <span className="block md:hidden">Build</span>
-            <span className="hidden md:block">Build with Thesys</span>
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
+    <div className="flex justify-between items-center p-m border-b border-b-black/4">
+      <div className="flex items-center gap-s">
+        <div className="rounded-[8px] w-[36px] h-[36px] bg-[linear-gradient(180deg,_#2684FF_0%,_#0255CF_100%)]" />
+        <p className="text-md text-primary">
+          Analytics <span className="text-secondary">Copilot</span>
+        </p>
+      </div>
+
+      <div className="flex items-center gap-s">
+        <Button
+          variant="secondary"
+          size="large"
+          onClick={switchToNewThread}
+          iconRight={<Home />}
+        />
+        <Button
+          variant="secondary"
+          size="large"
+          iconRight={<ArrowLeft />}
+          disabled={!canGoToPrevious}
+          onClick={goToPrevious}
+        />
+        <Button
+          variant="secondary"
+          size="large"
+          iconRight={<ArrowRight />}
+          disabled={!canGoToNext}
+          onClick={goToNext}
+        />
       </div>
     </div>
   );

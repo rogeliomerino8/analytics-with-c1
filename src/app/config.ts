@@ -1,36 +1,43 @@
-import type { FunctionCall, FunctionDeclaration } from "@google/genai";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { connectToMCPServer } from "./helpers/mcp";
+import Exa from "exa-js";
+import { z } from 'zod';
+import { zodToJsonSchema } from 'zod-to-json-schema';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RunnableFunction = any;
 
 type Config = {
-  minimumCards: number;
-  maximumCards: number;
+  systemPrompt: string;
   fetchMcpClient?: () => Promise<Client | undefined>;
-  fetchTools?: () => Promise<FunctionDeclaration[] | undefined>;
-  processToolCalls?: (
-    toolCalls: FunctionCall[]
-  ) => Promise<Array<ToolCallResult | undefined>>;
+  fetchTools?: () => Promise<RunnableFunction[] | undefined>;
 };
 
-type ToolCallResult = {
-  content?: Array<{
-    type: string;
-    text?: string;
-    data?: string;
-    mimeType?: string;
-  }>;
-  isError?: boolean;
-  _meta?: Record<string, unknown>;
-};
+const exa = new Exa(process.env.EXA_API_KEY);
+
+const webSearchSchema = z.object({
+  query: z.string(),
+});
 
 export const config: Config = {
-  minimumCards: 6, // The minimum number of cards that should be generated
-  maximumCards: 8, // The maximum number of cards that should be generated
+  systemPrompt: `
+  You are a UI engine for a marketing analytics dashboard. Given the user's prompt, generate a component appropriate to be displayed
+  in an analytics dashboard. Use visualizations and charts to answer the user's question and make data easy to understand as much as possible.
 
+  Suggest relevant follow up questions with every response.
+
+  Use the webSearch tool to:
+  - Search the web for information related to the data and suggest follow up questions that may be helpful to the user.
+  - Use web search to answer questions that other tools may not be sufficient for.
+  - Use web search to attach helpful context to the data. For example, if a stock price fell, use web search to find out plausible contributing factors.
+
+
+  Current date: ${new Date().toISOString()}
+  `,
   fetchMcpClient: async () => {
     const mcpClient = await connectToMCPServer("uv", [
       "--directory",
-      "/Users/<username>/Downloads/financial-datasets",
+      "/Users/hrijulthesys/Downloads/financial-datasets",
       "run",
       "server.py",
     ]);
@@ -40,26 +47,54 @@ export const config: Config = {
   fetchTools: async () => {
     const mcpClient = await config.fetchMcpClient?.();
     const availableTools = await mcpClient?.listTools();
-    return availableTools?.tools.map((tool) => ({
-      name: tool.name,
-      description: tool.description || "",
-      parameters: tool.inputSchema as Record<string, object>,
+    if (!availableTools?.tools) return [];
+
+    const mcpTools = availableTools.tools.map((tool) => ({
+      type: "function" as const,
+      function: {
+        name: tool.name,
+        description: tool.description || "",
+        parameters: tool.inputSchema as Record<string, object>,
+        function: async (args: string) => {
+          if (!mcpClient) {
+            return JSON.stringify({
+              error: "mcpClient not available",
+            });
+          }
+          try {
+            const parsedArgs = JSON.parse(args);
+            console.log("calling tool: ", tool.name, parsedArgs);
+            const result = await mcpClient.callTool({
+              name: tool.name,
+              arguments: parsedArgs,
+            });
+            console.log("tool result: ", result);
+            return JSON.stringify(result);
+          } catch (error) {
+            console.error(`error calling tool ${tool.name}: `, error);
+            return `Error calling tool ${tool.name}`;
+          }
+        },
+      },
     }));
-  },
 
-  processToolCalls: async (toolCalls) => {
-    const mcpClient = await config.fetchMcpClient?.();
+    const otherTools = [
+      {
+        type: "function" as const,
+        function: {
+          name: "webSearch",
+          description: "Search the web for the latest information",
+          parameters: zodToJsonSchema(webSearchSchema),
+          function: async (query: string) => {
+            const results = await exa.answer(query);
+            console.log("web search query: ", query);
+            console.log("web search results: ", results);
+            return JSON.stringify(results);
+          },
+        },
+      },
+    ];
 
-    // process all tool calls in parallel
-    const toolCallResults = await Promise.all(
-      toolCalls.map(async (toolCall) => {
-        return await mcpClient?.callTool({
-          name: toolCall.name || "",
-          arguments: toolCall.args,
-        });
-      })
-    );
-
-    return toolCallResults;
+    return [...mcpTools, ...otherTools];
   },
 };
