@@ -15,7 +15,7 @@ export default function Home() {
     <LazyMotion features={domAnimation}>
       <ThemeProvider mode="light">
         <div className="flex w-full h-full max-h-screen justify-between">
-          <div className="w-2/3 brightness-50">
+          <div className="w-2/3 brightness-40">
             <Image
               src="/background.svg"
               alt="background"
