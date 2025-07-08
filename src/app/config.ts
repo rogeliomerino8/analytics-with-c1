@@ -1,8 +1,8 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { connectToMCPServer } from "./helpers/mcp";
 import Exa from "exa-js";
-import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RunnableFunction = any;
@@ -23,8 +23,6 @@ export const config: Config = {
   systemPrompt: `
   You are a UI engine for a marketing analytics dashboard. Given the user's prompt, generate a component appropriate to be displayed
   in an analytics dashboard. Use visualizations and charts to answer the user's question and make data easy to understand as much as possible.
-
-  Suggest relevant follow up questions with every response.
 
   Use the webSearch tool to:
   - Search the web for information related to the data and suggest follow up questions that may be helpful to the user.
@@ -63,12 +61,10 @@ export const config: Config = {
           }
           try {
             const parsedArgs = JSON.parse(args);
-            console.log("calling tool: ", tool.name, parsedArgs);
             const result = await mcpClient.callTool({
               name: tool.name,
               arguments: parsedArgs,
             });
-            console.log("tool result: ", result);
             return JSON.stringify(result);
           } catch (error) {
             console.error(`error calling tool ${tool.name}: `, error);
@@ -87,8 +83,6 @@ export const config: Config = {
           parameters: zodToJsonSchema(webSearchSchema),
           function: async (query: string) => {
             const results = await exa.answer(query);
-            console.log("web search query: ", query);
-            console.log("web search results: ", results);
             return JSON.stringify(results);
           },
         },

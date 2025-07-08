@@ -46,9 +46,6 @@ export async function POST(req: NextRequest) {
     });
 
     llmResponse.on("message", (event) => messageStore.addMessage(event));
-    llmResponse.on("finalMessage", () => {
-      console.log('message history: ', messageStore.messages)
-    });
   } else {
     llmResponse = client.chat.completions.create({
       model: "c1-nightly",

@@ -1,4 +1,4 @@
-import { deleteThread, updateThread } from "@/src/services/threadService";
+import { deleteThread, updateThread } from "@/services/threadService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(

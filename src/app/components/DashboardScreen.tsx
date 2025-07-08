@@ -1,13 +1,8 @@
 import { ChatProvider } from "@crayonai/react-core";
-import {
-  ThemeProvider,
-  useThreadListManager,
-  useThreadManager,
-} from "@thesysai/genui-sdk";
+import { useThreadListManager, useThreadManager } from "@thesysai/genui-sdk";
 import { usePathname, useRouter } from "next/navigation";
 import * as apiClient from "@/apiClient";
-import { CopilotShell } from "@crayonai/react-ui";
-import { Messages } from "./Messages";
+import { CopilotTray } from "./CopilotTray";
 
 export const DashboardScreen = () => {
   const pathname = usePathname();
@@ -43,32 +38,7 @@ export const DashboardScreen = () => {
       threadListManager={threadListManager}
       threadManager={threadManager}
     >
-      <ThemeProvider mode="light">
-        <CopilotShell.Container
-          logoUrl="https://crayonai.org/img/crayon-logo.svg"
-          agentName="Analytics Copilot"
-          className="c1-chat-test"
-        >
-          <CopilotShell.ThreadContainer>
-            <Messages />
-          </CopilotShell.ThreadContainer>
-        </CopilotShell.Container>
-      </ThemeProvider>
+      <CopilotTray />
     </ChatProvider>
   );
-
-  // return (
-  //   <m.div
-  //     className="flex flex-col h-screen max-h-screen w-1/3 border-l border-default border-l-black/4"
-  //     initial={{ opacity: 0 }}
-  //     animate={{ opacity: 1 }}
-  //     transition={{ duration: 0.5, ease: "easeInOut" }}
-  //   >
-  //     <Header />
-  //     <div className="flex-1 p-m flex flex-col">
-  //       <div className="flex-1" />
-  //       <Composer />
-  //     </div>
-  //   </m.div>
-  // );
 };

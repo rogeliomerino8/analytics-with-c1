@@ -20,8 +20,6 @@ export const POST = async (req: Request) => {
 
   const firstBlock = response.content[0];
 
-  console.log('response.content: ', response.content)
-
   if (!firstBlock || firstBlock.type !== "text") {
     return NextResponse.json(
       { error: "Invalid response from model" },

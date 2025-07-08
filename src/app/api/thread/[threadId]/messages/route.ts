@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUIThreadMessages } from "@/src/services/threadService";
+import { getUIThreadMessages } from "@/services/threadService";
 
 interface Params {
   threadId: string;

@@ -3,7 +3,7 @@ import {
   addMessages,
   updateMessage,
   Message,
-} from "@/src/services/threadService";
+} from "@/services/threadService";
 
 interface Params {
   threadId: string;

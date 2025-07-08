@@ -1,17 +1,10 @@
-<svg width="308" height="309" viewBox="0 0 308 309" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_f_53_4905)">
-<rect x="56" y="56.5" width="196" height="196" rx="64" fill="url(#paint0_radial_53_4905)"/>
-</g>
-<path d="M136.442 121.833C116.025 138.167 113.983 160.625 130.317 189.208M173.192 170.833C193.608 154.5 195.65 132.481 179.317 103.898M154.817 97.3333C141.821 97.3333 129.358 102.496 120.168 111.685C110.979 120.874 105.817 133.338 105.817 146.333C105.817 159.329 110.979 171.792 120.168 180.982C129.358 190.171 141.821 195.333 154.817 195.333C167.812 195.333 180.276 190.171 189.465 180.982C198.654 171.792 203.817 159.329 203.817 146.333C203.817 133.338 198.654 120.874 189.465 111.685C180.276 102.496 167.812 97.3333 154.817 97.3333ZM154.817 115.708C146.694 115.708 138.905 118.935 133.162 124.678C127.418 130.422 124.192 138.211 124.192 146.333C124.192 154.456 127.418 162.245 133.162 167.988C138.905 173.732 146.694 176.958 154.817 176.958C162.939 176.958 170.728 173.732 176.472 167.988C182.215 162.245 185.442 154.456 185.442 146.333C185.442 138.211 182.215 130.422 176.472 124.678C170.728 118.935 162.939 115.708 154.817 115.708Z" stroke="white" stroke-width="7.20588" stroke-linejoin="round"/>
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="36" height="36" rx="12" fill="url(#paint0_linear_77_6828)"/>
+<path d="M17.3227 11.6765V18L15.876 17.1765C13.3074 15.7059 11.713 12.9706 11.713 10H10.6501V17.2353C10.6501 19.5882 12.0083 21.7647 14.1636 22.7941L17.3522 24.3235V18L18.7989 18.8235C21.3675 20.2941 22.9619 23.0294 22.9619 26H24.0248V18.7647C24.0248 16.4118 22.6666 14.2353 20.5113 13.2059L17.3227 11.6765Z" fill="white"/>
 <defs>
-<filter id="filter0_f_53_4905" x="0" y="0.5" width="308" height="308" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="28" result="effect1_foregroundBlur_53_4905"/>
-</filter>
-<radialGradient id="paint0_radial_53_4905" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(154.817 56.5) rotate(90.2387) scale(196.002)">
-<stop stop-color="#0051FF"/>
-<stop offset="1" stop-color="#74BCFF"/>
-</radialGradient>
+<linearGradient id="paint0_linear_77_6828" x1="3.12468" y1="2.88011" x2="24.4455" y2="39.8195" gradientUnits="userSpaceOnUse">
+<stop stop-color="#AB9AFF"/>
+<stop offset="1" stop-color="#646BFF"/>
+</linearGradient>
 </defs>
 </svg>
