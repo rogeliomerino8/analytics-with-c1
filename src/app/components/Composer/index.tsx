@@ -2,7 +2,16 @@ import { IconButton } from "@crayonai/react-ui";
 import { ArrowUp, StopCircle } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useThreadActions, useThreadState } from "@crayonai/react-core";
-import { Suggestions } from "./Suggestions";
+import { Suggestions, type Suggestion } from "./Suggestions";
+
+const prefilledSuggestions: Suggestion[] = [
+  { text: "Show me 3 stocks with net income > $10B", type: "explain" },
+  { text: "What is the latest news for Tesla?", type: "investigate" },
+  {
+    text: "Show me Microsoft's latest quarterly earnings report.",
+    type: "analyze",
+  },
+];
 
 export const Composer = () => {
   const [textContent, setTextContent] = useState("");
@@ -43,17 +52,12 @@ export const Composer = () => {
     input.style.height = `${input.scrollHeight}px`;
   }, [textContent]);
 
+  const suggestions = messages.length === 0 ? prefilledSuggestions : [];
+
   return (
     <div className="flex flex-col gap-l bg-none relative">
       <Suggestions
-        suggestions={[
-          { text: "Show me 3 stocks with net income > $10B", type: "explain" },
-          { text: "What is the latest news for Tesla?", type: "investigate" },
-          {
-            text: "Show me Microsoft's latest quarterly earnings report.",
-            type: "analyze",
-          },
-        ]}
+        suggestions={suggestions}
         collapsed={messages.length > 0}
         executePrompt={executePrompt}
       />

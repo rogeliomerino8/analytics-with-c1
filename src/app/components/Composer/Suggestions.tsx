@@ -2,11 +2,13 @@ import { ArrowRight, BadgePercent, TrendingUp, Users } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
 
+export type Suggestion = {
+  text: string;
+  type: "investigate" | "analyze" | "explain";
+};
+
 interface SuggestionsProps {
-  suggestions: {
-    text: string;
-    type: "investigate" | "analyze" | "explain";
-  }[];
+  suggestions: Suggestion[];
   collapsed?: boolean;
   executePrompt: (prompt: string) => void;
 }
@@ -23,7 +25,7 @@ export const Suggestions = ({
     <div
       className={clsx(
         "flex flex-col gap-[4px] absolute bottom-[125%] z-10 w-full transition-all duration-300 pt-l delay-75",
-        expanded && "bg-linear-to-t from-container from-90% to-transparent"
+        expanded && "bg-container"
       )}
     >
       {suggestions.map((suggestion, index) => (
