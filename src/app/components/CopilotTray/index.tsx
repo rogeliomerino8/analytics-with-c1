@@ -56,7 +56,7 @@ export const CopilotTray = () => {
       {groupedMessages.length === 0 ? (
         <WelcomeCard />
       ) : (
-        <div className="flex-1 min-h-0 overflow-auto px-m py-l flex flex-col gap-xl pb-[84px]">
+        <div className="flex-1 min-h-0 overflow-auto px-m py-l flex flex-col gap-xl pb-[108px]">
           <MessageGroup
             userMessage={currentMessageGroup?.userMessage as Message}
             assistantMessage={currentMessageGroup?.assistantMessage as Message}

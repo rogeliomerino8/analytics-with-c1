@@ -1,6 +1,6 @@
 import React from "react";
 import { IconButton } from "@crayonai/react-ui";
-import { ArrowRight, ArrowLeft, Home } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 
 interface HeaderProps {

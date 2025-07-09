@@ -1,6 +1,7 @@
 import { ArrowRight, BadgePercent, TrendingUp, Users } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
+import { m } from "framer-motion";
 
 export type Suggestion = {
   text: string;
@@ -22,11 +23,15 @@ export const Suggestions = ({
   const expanded = !collapsed || hovered;
 
   return (
-    <div
+    <m.div
       className={clsx(
-        "flex flex-col gap-[4px] absolute bottom-[125%] z-10 w-full transition-all duration-300 pt-l delay-75",
+        "flex flex-col gap-[4px] absolute bottom-[125%] z-10 w-full pt-l delay-75 transition-all duration-300",
         expanded && "bg-container"
       )}
+      initial={{ opacity: 0, display: "none" }}
+      animate={{ opacity: 1, display: "flex" }}
+      exit={{ opacity: 0, transitionEnd: { display: "none" } }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
     >
       {suggestions.map((suggestion, index) => (
         <Suggestion
@@ -38,7 +43,7 @@ export const Suggestions = ({
           executePrompt={executePrompt}
         />
       ))}
-    </div>
+    </m.div>
   );
 };
 
