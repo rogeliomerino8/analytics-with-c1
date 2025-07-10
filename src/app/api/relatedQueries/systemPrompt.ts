@@ -12,6 +12,8 @@ export const systemPrompt = `
           - Investigate queries should be about investigating plausible causes of the data (such as increase or decrease in trends).
           - Analyze queries should be about analyzing the data in the UI.
         - Try to make sure the queries lead to visual results (charts and tables).
+        - Try to keep the queries shorter than 13 words.
+        - Try to use actual numbers from the provided data in the queries.
         - The queries should be in the same language as the message.
         - Output directly parseable JSON, with no other formatting or text.
       </rules>

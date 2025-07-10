@@ -76,13 +76,13 @@ const Suggestion = ({
       onMouseLeave={() => setHovered(false)}
       onClick={() => executePrompt(text)}
     >
-      <div className="flex items-center gap-s">
+      <div className="flex items-center gap-m">
         {type === "investigate" && (
-          <TrendingUp className="text-blue-500" size={16} />
+          <TrendingUp className="text-blue-500" size={18} />
         )}
-        {type === "analyze" && <Users className="text-orange-500" size={16} />}
+        {type === "analyze" && <Users className="text-orange-500" size={18} />}
         {type === "explain" && (
-          <BadgePercent className="text-pink-500" size={16} />
+          <BadgePercent className="text-pink-500" size={18} />
         )}
         <span className="text-primary">{text}</span>
       </div>
