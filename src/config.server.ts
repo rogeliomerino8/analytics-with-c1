@@ -9,7 +9,13 @@ import path from "path";
 type RunnableFunction = any;
 
 type ServerConfig = {
+  /**
+   *  The system prompt to configure the behaviour and tone of the model.
+   */
   systemPrompt: string;
+  /**
+   * Returns the tools that are available to the model.
+   */
   fetchTools: () => Promise<RunnableFunction[]>;
 };
 
@@ -26,6 +32,7 @@ export const serverConfig: ServerConfig = {
 
   Current date: ${new Date().toISOString()}
   `,
+
   fetchTools: async (): Promise<RunnableFunction[]> => {
     const mcpClient = await fetchMcpClient();
     const availableTools = await mcpClient?.listTools();

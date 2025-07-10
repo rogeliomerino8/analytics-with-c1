@@ -1,6 +1,9 @@
 import type { Suggestion } from "./app/components/Composer/Suggestions";
 
 type Config = {
+  /**
+   * The prompt suggestions to show during the zero state when the user has yet to interact with the agent / copilot.
+   */
   prefilledSuggestions?: Suggestion[];
 };
 
