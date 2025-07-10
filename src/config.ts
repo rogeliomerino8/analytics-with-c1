@@ -1,8 +1,9 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { connectToMCPServer } from "./helpers/mcp";
+import { connectToMCPServer } from "./app/helpers/mcp";
 import Exa from "exa-js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import path from "path";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RunnableFunction = any;
@@ -33,9 +34,11 @@ export const config: Config = {
   Current date: ${new Date().toISOString()}
   `,
   fetchMcpClient: async () => {
+    // Use absolute path to the MCP server directory
+    const mcpDir = path.resolve(process.cwd(), "financial-datasets-mcp");
     const mcpClient = await connectToMCPServer("uv", [
       "--directory",
-      "/Users/hrijulthesys/Downloads/financial-datasets",
+      mcpDir,
       "run",
       "server.py",
     ]);

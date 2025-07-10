@@ -6,7 +6,7 @@ import {
 } from "@/services/threadService";
 import { transformStream } from "@crayonai/stream";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
-import { config } from "@/app/config";
+import { config } from "@/config";
 
 type ThreadId = string;
 
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   };
 
   const client = new OpenAI({
-    baseURL: "http://localhost:3102/v1/embed",
+    baseURL: "https://api.thesys.dev/v1/embed",
     apiKey: process.env.THESYS_API_KEY,
   });
 

@@ -93,7 +93,6 @@ export const Composer = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("related queries fetched: ", data);
         setSuggestions(data.relatedQueries);
       });
   }, [isRunning, messages, messages.length]);

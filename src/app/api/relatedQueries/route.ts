@@ -29,11 +29,25 @@ export const POST = async (req: Request) => {
 
   let jsonToParse = firstBlock.text;
 
-  if (firstBlock.text.startsWith("```json")) {
-    jsonToParse = firstBlock.text.slice(7, -3);
+  // Extract JSON from the response, handling markdown and conversational text
+  if (jsonToParse.includes("```json")) {
+    jsonToParse = jsonToParse.split("```json")[1].split("```")[0].trim();
+  } else {
+    const jsonStartIndex = jsonToParse.indexOf("{");
+    const jsonEndIndex = jsonToParse.lastIndexOf("}");
+    if (jsonStartIndex !== -1 && jsonEndIndex !== -1) {
+      jsonToParse = jsonToParse.substring(jsonStartIndex, jsonEndIndex + 1);
+    }
   }
 
-  const data = responseSchema.parse(JSON.parse(jsonToParse));
-
-  return NextResponse.json(data);
+  try {
+    const data = responseSchema.parse(JSON.parse(jsonToParse));
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error("Error parsing related queries response", e);
+    return NextResponse.json(
+      { error: "Invalid response from model" },
+      { status: 500 }
+    );
+  }
 };
