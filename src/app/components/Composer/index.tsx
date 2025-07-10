@@ -4,15 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useThreadActions, useThreadState } from "@crayonai/react-core";
 import { Suggestions, type Suggestion } from "./Suggestions";
 import { AnimatePresence } from "framer-motion";
-
-const prefilledSuggestions: Suggestion[] = [
-  { text: "Show me 3 stocks with net income > $10B", type: "explain" },
-  { text: "What is the latest news for Tesla?", type: "investigate" },
-  {
-    text: "Show me Microsoft's latest quarterly earnings report.",
-    type: "analyze",
-  },
-];
+import { config } from "@/config";
 
 export const Composer = () => {
   const [textContent, setTextContent] = useState("");
@@ -21,7 +13,7 @@ export const Composer = () => {
   const { messages } = useThreadState();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>(
-    messages.length === 0 ? prefilledSuggestions : []
+    messages.length === 0 ? (config.prefilledSuggestions ?? []) : []
   );
 
   useEffect(() => {
@@ -57,9 +49,9 @@ export const Composer = () => {
   }, [textContent]);
 
   useEffect(() => {
-    if (messages.length === 0) return;
+    if (messages.length === 0) return; // Only show suggestions after an assistant message
 
-    if (isRunning) {
+    if (isRunning || messages.length % 2 !== 0) {
       setSuggestions([]);
       return;
     }

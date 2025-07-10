@@ -6,7 +6,7 @@ import {
 } from "@/services/threadService";
 import { transformStream } from "@crayonai/stream";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
-import { config } from "@/config";
+import { serverConfig } from "@/config.server";
 
 type ThreadId = string;
 
@@ -22,18 +22,18 @@ export async function POST(req: NextRequest) {
   };
 
   const client = new OpenAI({
-    baseURL: "https://api.thesys.dev/v1/embed",
+    baseURL: "http://localhost:3102/v1/embed",
     apiKey: process.env.THESYS_API_KEY,
   });
 
-  const tools = await config.fetchTools?.();
+  const tools = await serverConfig.fetchTools();
 
   const runToolsResponse = client.beta.chat.completions.runTools({
     model: "c1-nightly",
     messages: [
       {
         role: "system",
-        content: config.systemPrompt,
+        content: serverConfig.systemPrompt,
       },
       ...(await getLLMThreadMessages(threadId)),
       {
