@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "build": "cp-tsx && next build",
+    "start": "cp-tsx && next start",
+    "lint": "next lint",
+    "cp-tsx": "cp -r node_modules/tsx financial-datasets-mcp/tsx"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
