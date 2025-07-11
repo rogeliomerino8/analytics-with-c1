@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "cp-tsx && next build",
-    "start": "cp-tsx && next start",
+    "dev": "npm run cp-tsx && next dev --turbopack",
+    "build": "npm run cp-tsx && next build",
+    "start": "npm run cp-tsx && next start",
     "lint": "next lint",
     "cp-tsx": "cp -r node_modules/tsx financial-datasets-mcp/tsx"
   },
