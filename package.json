@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
-    "@crayonai/react-ui": "^0.8.6",
     "@crayonai/react-core": "^0.7.6",
+    "@crayonai/react-ui": "^0.8.6",
     "@crayonai/stream": "^0.6.4",
     "@google/genai": "^1.0.1",
     "@modelcontextprotocol/sdk": "^1.15.0",
@@ -26,6 +26,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.89.0",
+    "tsx": "^4.20.3",
+    "dotenv": "^16.4.5",
     "zod": "^3.25.75",
     "zod-to-json-schema": "^3.24.6"
   },

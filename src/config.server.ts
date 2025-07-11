@@ -56,6 +56,7 @@ export const serverConfig: ServerConfig = {
               name: tool.name,
               arguments: parsedArgs,
             });
+            console.log('called tool', tool.name, 'with args', parsedArgs, 'result:', result)
             return JSON.stringify(result);
           } catch (error) {
             console.error(`error calling tool ${tool.name}: `, error);
@@ -74,6 +75,7 @@ export const serverConfig: ServerConfig = {
           parameters: zodToJsonSchema(webSearchSchema),
           function: async (query: string) => {
             const results = await exa.answer(query);
+            console.log('called websearch with query', query, 'results:', results)
             return JSON.stringify(results);
           },
         },
@@ -93,11 +95,9 @@ const webSearchSchema = z.object({
 const fetchMcpClient = async (): Promise<Client | undefined> => {
   // Use absolute path to the MCP server directory
   const mcpDir = path.resolve(process.cwd(), "financial-datasets-mcp");
-  const mcpClient = await connectToMCPServer("uv", [
-    "--directory",
-    mcpDir,
-    "run",
-    "server.py",
+  const mcpClient = await connectToMCPServer("tsx", [
+    path.join(mcpDir, "src/index.ts")
   ]);
+  console.log("mcpClient", mcpClient);
   return mcpClient;
 };
