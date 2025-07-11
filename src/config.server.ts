@@ -95,7 +95,8 @@ const webSearchSchema = z.object({
 const fetchMcpClient = async (): Promise<Client | undefined> => {
   // Use absolute path to the MCP server directory
   const mcpDir = path.resolve(process.cwd(), "financial-datasets-mcp");
-  const mcpClient = await connectToMCPServer("tsx", [
+  const tsxPath = path.resolve(process.cwd(), "node_modules/.bin/tsx");
+  const mcpClient = await connectToMCPServer(tsxPath, [
     path.join(mcpDir, "src/index.ts")
   ]);
   console.log("mcpClient", mcpClient);
