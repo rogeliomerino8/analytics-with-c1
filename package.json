@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run cp-tsx && next dev --turbopack",
-    "build": "npm run cp-tsx && next build",
-    "start": "npm run cp-tsx && next start",
-    "lint": "next lint",
-    "cp-tsx": "cp -r node_modules/tsx financial-datasets-mcp/tsx"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
@@ -15,11 +14,9 @@
     "@crayonai/react-ui": "^0.8.6",
     "@crayonai/stream": "^0.6.4",
     "@google/genai": "^1.0.1",
-    "@modelcontextprotocol/sdk": "^1.15.0",
     "@thesysai/genui-sdk": "^0.6.25",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
-    "esbuild": "^0.23.0",
     "exa-js": "^1.8.19",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.469.0",
@@ -29,7 +26,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.89.0",
-    "tsx": "^4.20.3",
     "zod": "^3.25.75",
     "zod-to-json-schema": "^3.24.6"
   },

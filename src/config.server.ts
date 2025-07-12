@@ -1,9 +1,7 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { connectToMCPServer } from "./app/helpers/mcp";
+import { financialTools } from "./app/tools/financial";
 import Exa from "exa-js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import path from "path";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RunnableFunction = any;
@@ -34,38 +32,6 @@ export const serverConfig: ServerConfig = {
   `,
 
   fetchTools: async (): Promise<RunnableFunction[]> => {
-    const mcpClient = await fetchMcpClient();
-    const availableTools = await mcpClient?.listTools();
-    if (!availableTools?.tools) return [];
-
-    const mcpTools = availableTools.tools.map((tool) => ({
-      type: "function" as const,
-      function: {
-        name: tool.name,
-        description: tool.description || "",
-        parameters: tool.inputSchema as Record<string, object>,
-        function: async (args: string) => {
-          if (!mcpClient) {
-            return JSON.stringify({
-              error: "mcpClient not available",
-            });
-          }
-          try {
-            const parsedArgs = JSON.parse(args);
-            const result = await mcpClient.callTool({
-              name: tool.name,
-              arguments: parsedArgs,
-            });
-            console.log('called tool', tool.name, 'with args', parsedArgs, 'result:', result)
-            return JSON.stringify(result);
-          } catch (error) {
-            console.error(`error calling tool ${tool.name}: `, error);
-            return `Error calling tool ${tool.name}`;
-          }
-        },
-      },
-    }));
-
     const otherTools = [
       {
         type: "function" as const,
@@ -75,14 +41,19 @@ export const serverConfig: ServerConfig = {
           parameters: zodToJsonSchema(webSearchSchema),
           function: async (query: string) => {
             const results = await exa.answer(query);
-            console.log('called websearch with query', query, 'results:', results)
+            console.log(
+              "called websearch with query",
+              query,
+              "results:",
+              results
+            );
             return JSON.stringify(results);
           },
         },
       },
     ];
 
-    return [...mcpTools, ...otherTools];
+    return [...financialTools, ...otherTools];
   },
 };
 
@@ -91,14 +62,3 @@ const exa = new Exa(process.env.EXA_API_KEY);
 const webSearchSchema = z.object({
   query: z.string(),
 });
-
-const fetchMcpClient = async (): Promise<Client | undefined> => {
-  // Use absolute path to the MCP server directory
-  const mcpDir = path.resolve(process.cwd(), "financial-datasets-mcp");
-  const tsxPath = path.resolve(process.cwd(), "financial-datasets-mcp/tsx/dist/cli.mjs");
-  const mcpClient = await connectToMCPServer(tsxPath, [
-    path.join(mcpDir, "src/index.ts")
-  ]);
-  console.log("mcpClient", mcpClient);
-  return mcpClient;
-};
