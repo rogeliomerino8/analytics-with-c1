@@ -54,14 +54,7 @@ export const getFinancialTools = (
             lastThinkingState = state;
           }
           const result = await fn(parsedArgs);
-          console.log(
-            "called tool",
-            name,
-            "with args",
-            parsedArgs,
-            "result:",
-            result
-          );
+
           return JSON.stringify(result);
         } catch (error) {
           console.error(`error calling tool ${name}: `, error);

@@ -48,12 +48,6 @@ export const serverConfig: ServerConfig = {
               description: "Collecting live insights for broader context",
             });
             const results = await exa.answer(query);
-            console.log(
-              "called websearch with query",
-              query,
-              "results:",
-              results
-            );
             return JSON.stringify(results);
           },
         },

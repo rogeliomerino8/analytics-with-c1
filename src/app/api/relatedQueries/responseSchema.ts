@@ -5,6 +5,7 @@ export const responseSchema = z.object({
     z.object({
       text: z.string(),
       type: z.enum(["explain", "investigate", "analyze"]),
+      title: z.string({description: "A short title for the query to display on the UI."}),
     })
   ),
 });

@@ -6,7 +6,11 @@ import { Suggestions, type Suggestion } from "./Suggestions";
 import { AnimatePresence } from "framer-motion";
 import { config } from "@/config";
 
-export const Composer = () => {
+export const Composer = ({
+  pushQueryTitle,
+}: {
+  pushQueryTitle: (title: string) => void;
+}) => {
   const [textContent, setTextContent] = useState("");
   const { processMessage, onCancel } = useThreadActions();
   const { isRunning } = useThreadState();
@@ -98,6 +102,7 @@ export const Composer = () => {
             suggestions={suggestions}
             collapsed={messages.length > 0}
             executePrompt={executePrompt}
+            pushQueryTitle={pushQueryTitle}
           />
         )}
       </AnimatePresence>

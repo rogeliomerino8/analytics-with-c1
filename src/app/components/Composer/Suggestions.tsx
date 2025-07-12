@@ -6,18 +6,21 @@ import { m } from "framer-motion";
 export type Suggestion = {
   text: string;
   type: "investigate" | "analyze" | "explain";
+  title: string;
 };
 
 interface SuggestionsProps {
   suggestions: Suggestion[];
   collapsed?: boolean;
   executePrompt: (prompt: string) => void;
+  pushQueryTitle: (title: string) => void;
 }
 
 export const Suggestions = ({
   suggestions,
   collapsed,
   executePrompt,
+  pushQueryTitle,
 }: SuggestionsProps) => {
   const [hovered, setHovered] = useState(false);
   const expanded = !collapsed || hovered;
@@ -41,6 +44,7 @@ export const Suggestions = ({
           total={suggestions.length}
           setHovered={setHovered}
           executePrompt={executePrompt}
+          pushQueryTitle={pushQueryTitle}
         />
       ))}
     </m.div>
@@ -48,21 +52,25 @@ export const Suggestions = ({
 };
 
 interface SuggestionProps {
+  title?: string;
   text: string;
   type: "investigate" | "analyze" | "explain";
   position: number;
   total: number;
   setHovered: (hovered: boolean) => void;
   executePrompt: (prompt: string) => void;
+  pushQueryTitle: (title: string) => void;
 }
 
 const Suggestion = ({
+  title,
   text,
   type,
   position,
   total,
   setHovered,
   executePrompt,
+  pushQueryTitle,
 }: SuggestionProps) => {
   return (
     <div
@@ -74,7 +82,10 @@ const Suggestion = ({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => executePrompt(text)}
+      onClick={() => {
+        pushQueryTitle(title ?? text);
+        executePrompt(text);
+      }}
     >
       <div className="flex items-center gap-m">
         {type === "investigate" && (

@@ -11,6 +11,7 @@ import "@/custom.css";
 export const CopilotTray = () => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const { messages } = useThreadState();
+  const [queryTitles, setQueryTitles] = useState<string[]>([]);
 
   const groupedMessages: {
     userMessage: Message;
@@ -31,6 +32,12 @@ export const CopilotTray = () => {
       setCurrentMessageIndex(groupedMessages.length - 1);
     }
   }, [groupedMessages.length, messages.length]);
+
+  const currentQueryTitle = queryTitles[currentMessageIndex];
+
+  const pushQueryTitle = (title: string) => {
+    setQueryTitles((prev) => [...prev, title]);
+  };
 
   const currentMessageGroup = groupedMessages[currentMessageIndex];
 
@@ -58,6 +65,7 @@ export const CopilotTray = () => {
       ) : (
         <div className="flex-1 min-h-0 overflow-auto py-l px-xl flex flex-col gap-xl pb-[108px]">
           <MessageGroup
+            queryTitle={currentQueryTitle}
             userMessage={currentMessageGroup?.userMessage as Message}
             assistantMessage={currentMessageGroup?.assistantMessage as Message}
           />
@@ -65,7 +73,7 @@ export const CopilotTray = () => {
       )}
 
       <div className="p-xl bg-none">
-        <Composer />
+        <Composer pushQueryTitle={pushQueryTitle} />
       </div>
     </m.div>
   );
