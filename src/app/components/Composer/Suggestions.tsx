@@ -6,7 +6,7 @@ import { m } from "framer-motion";
 export type Suggestion = {
   text: string;
   type: "investigate" | "analyze" | "explain";
-  title: string;
+  title?: string;
 };
 
 interface SuggestionsProps {
