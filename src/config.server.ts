@@ -1,7 +1,7 @@
-import { financialTools } from "./app/tools/financial";
 import Exa from "exa-js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { getFinancialTools } from "./app/tools/financial";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RunnableFunction = any;
@@ -14,7 +14,9 @@ type ServerConfig = {
   /**
    * Returns the tools that are available to the model.
    */
-  fetchTools: () => Promise<RunnableFunction[]>;
+  fetchTools: (
+    writeThinkingState: (item: { title: string; description: string }) => void
+  ) => Promise<RunnableFunction[]>;
 };
 
 export const serverConfig: ServerConfig = {
@@ -31,7 +33,8 @@ export const serverConfig: ServerConfig = {
   Current date: ${new Date().toISOString()}
   `,
 
-  fetchTools: async (): Promise<RunnableFunction[]> => {
+  fetchTools: async (writeThinkingState): Promise<RunnableFunction[]> => {
+    const financialTools = getFinancialTools(writeThinkingState);
     const otherTools = [
       {
         type: "function" as const,
@@ -40,6 +43,10 @@ export const serverConfig: ServerConfig = {
           description: "Search the web for the latest information",
           parameters: zodToJsonSchema(webSearchSchema),
           function: async (query: string) => {
+            writeThinkingState({
+              title: "Searching the web",
+              description: "Collecting live insights for broader context",
+            });
             const results = await exa.answer(query);
             console.log(
               "called websearch with query",

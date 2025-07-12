@@ -9,10 +9,16 @@ type Config = {
 
 export const config: Config = {
   prefilledSuggestions: [
-    { text: "Show me 3 stocks with net income > $10B", type: "explain" },
-    { text: "What is the latest news for Tesla?", type: "investigate" },
     {
-      text: "Show me Microsoft's latest quarterly earnings report.",
+      text: "Explain Apple's revenue trend over the past 5 years",
+      type: "explain",
+    },
+    {
+      text: "Investigate Amazon's revenue growth since 2020",
+      type: "investigate",
+    },
+    {
+      text: "Analyze Tesla's net profit this year",
       type: "analyze",
     },
   ],

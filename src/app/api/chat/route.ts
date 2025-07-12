@@ -1,16 +1,19 @@
 import { NextRequest } from "next/server";
 import OpenAI from "openai";
-import {
-  addMessages,
-  getLLMThreadMessages,
-} from "@/services/threadService";
-import { transformStream } from "@crayonai/stream";
+import { addMessages, getLLMThreadMessages } from "@/services/threadService";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import { serverConfig } from "@/config.server";
+import { makeC1Response } from "@thesysai/genui-sdk/server";
 
 type ThreadId = string;
 
 export async function POST(req: NextRequest) {
+  const c1Response = makeC1Response();
+  c1Response.writeThinkItem({
+    title: "Analyzing Prompt",
+    description: "Interpreting your query and querying the datasets",
+  });
+
   const { prompt, threadId, responseId } = (await req.json()) as {
     prompt: {
       role: "user";
@@ -26,10 +29,10 @@ export async function POST(req: NextRequest) {
     apiKey: process.env.THESYS_API_KEY,
   });
 
-  const tools = await serverConfig.fetchTools();
+  const tools = await serverConfig.fetchTools(c1Response.writeThinkItem);
 
   const runToolsResponse = client.beta.chat.completions.runTools({
-    model: "c1-nightly",
+    model: "c1/anthropic/claude-sonnet-4/v-20250617",
     messages: [
       {
         role: "system",
@@ -52,11 +55,14 @@ export async function POST(req: NextRequest) {
     isError = true;
   });
 
+  runToolsResponse.on("content", c1Response.writeContent);
+
   runToolsResponse.on("message", (message) => {
     allRunToolsMessages.push(message);
   });
 
   runToolsResponse.on("end", async () => {
+    c1Response.end();
     // store messages on end only if there is no error
     if (isError) {
       return;
@@ -79,13 +85,7 @@ export async function POST(req: NextRequest) {
     await addMessages(threadId, ...messagesToStore);
   });
 
-  const llmStream = await runToolsResponse;
-
-  const responseStream = transformStream(llmStream, (chunk) => {
-    return chunk.choices[0]?.delta?.content;
-  });
-
-  return new Response(responseStream as ReadableStream, {
+  return new Response(c1Response.responseStream, {
     headers: {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
