@@ -5,7 +5,7 @@ export const responseSchema = z.object({
     z.object({
       text: z.string(),
       type: z.enum(["explain", "investigate", "analyze"]),
-      title: z.string({description: "A sub 13 word title for the query to display on the UI."}),
+      title: z.string({description: "A sub 13 word title for the query to display on the UI. Make sure the phrasing is more like a title and less like a prompt."}),
     })
   ),
 });
