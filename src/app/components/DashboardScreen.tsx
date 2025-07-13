@@ -1,12 +1,15 @@
 import { ChatProvider } from "@crayonai/react-core";
+import { ErrorScreen } from "./ErrorScreen";
 import { useThreadListManager, useThreadManager } from "@thesysai/genui-sdk";
 import { usePathname, useRouter } from "next/navigation";
 import * as apiClient from "@/apiClient";
 import { CopilotTray } from "./CopilotTray";
+import { useState } from "react";
 
 export const DashboardScreen = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [isError, setIsError] = useState(false);
 
   const threadListManager = useThreadListManager({
     fetchThreadList: () => apiClient.getThreadList(),
@@ -30,8 +33,43 @@ export const DashboardScreen = () => {
     onUpdateMessage: ({ message }) => {
       apiClient.updateMessage(threadListManager.selectedThreadId!, message);
     },
-    apiUrl: "/api/chat",
+    processMessage: async ({ messages, threadId, responseId }) => {
+      const latestMessage = messages[messages.length - 1];
+      let errorCount = 0;
+      let delay = 2000; // start with 2 seconds
+
+      while (errorCount < 3) {
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            body: JSON.stringify({
+              prompt: latestMessage,
+              threadId,
+              responseId,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error("Failed to process message");
+          }
+          return response;
+        } catch (error) {
+          errorCount++;
+          console.error(`Attempt ${errorCount} of 3 failed.`, error);
+          if (errorCount < 3) {
+            // Exponential backoff: 1s, 2s, 4s
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            delay *= 2;
+          }
+        }
+      }
+      setIsError(true);
+      throw new Error("Failed to process message after multiple retries");
+    },
   });
+
+  if (isError) {
+    return <ErrorScreen />;
+  }
 
   return (
     <ChatProvider
