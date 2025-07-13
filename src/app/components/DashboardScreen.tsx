@@ -56,7 +56,6 @@ export const DashboardScreen = () => {
           errorCount++;
           console.error(`Attempt ${errorCount} of 3 failed.`, error);
           if (errorCount < 3) {
-            // Exponential backoff: 1s, 2s, 4s
             await new Promise((resolve) => setTimeout(resolve, delay));
             delay *= 2;
           }
