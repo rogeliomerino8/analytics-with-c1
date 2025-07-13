@@ -3,9 +3,14 @@
 import { Button } from "@crayonai/react-ui";
 import Image from "next/image";
 import { useTheme } from "../../hooks/useTheme";
+import { Github } from "lucide-react";
 
 export const NavBar = () => {
   const theme = useTheme();
+
+  const goToSourceCode = () => {
+    window.open("https://github.com/thesysdev/analytics-with-c1", "_blank");
+  };
 
   const goToDocumentation = () => {
     window.open("https://docs.thesys.dev", "_blank");
@@ -32,7 +37,8 @@ export const NavBar = () => {
         <span className="text-primary">Analytics</span>
       </div>
       <div className="flex items-center gap-s">
-        <Button variant="secondary" size="medium" onClick={goToDocumentation}>
+        <Button variant="tertiary" size="medium" onClick={goToSourceCode} iconLeft={<Github />}>GitHub</Button>
+        <Button variant="tertiary" size="medium" onClick={goToDocumentation}>
           Documentation
         </Button>
         <Button variant="primary" size="medium" onClick={goToConsole}>
