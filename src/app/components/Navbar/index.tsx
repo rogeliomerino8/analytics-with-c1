@@ -37,7 +37,14 @@ export const NavBar = () => {
         <span className="text-primary">Analytics</span>
       </div>
       <div className="flex items-center gap-s">
-        <Button variant="tertiary" size="medium" onClick={goToSourceCode} iconLeft={<Github />}>GitHub</Button>
+        <Button
+          variant="tertiary"
+          size="medium"
+          onClick={goToSourceCode}
+          iconLeft={<Github />}
+        >
+          GitHub
+        </Button>
         <Button variant="tertiary" size="medium" onClick={goToDocumentation}>
           Documentation
         </Button>
