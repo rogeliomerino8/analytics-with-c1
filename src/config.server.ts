@@ -24,11 +24,12 @@ export const serverConfig: ServerConfig = {
   You are a UI engine for a marketing analytics dashboard. Given the user's prompt, generate a component appropriate to be displayed
   in an analytics dashboard. Use visualizations and charts to answer the user's question and make data easy to understand as much as possible.
 
+  Do not show follow ups in the response.
+
   Use the webSearch tool to:
   - Search the web for information related to the data and suggest follow up questions that may be helpful to the user.
   - Use web search to answer questions that other tools may not be sufficient for.
   - Use web search to attach helpful context to the data. For example, if a stock price fell, use web search to find out plausible contributing factors.
-
 
   Current date: ${new Date().toISOString()}
   `,
