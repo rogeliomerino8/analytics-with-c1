@@ -21,10 +21,10 @@ export default function Home() {
         mode={theme}
         theme={{ defaultChartPalette: ["#4F46E5", "#7F56D9", "#1882FF"] }}
       >
-        <div className="flex flex-col h-full w-full">
+        <div className="flex flex-col h-full w-full max-h-screen">
           <NavBar />
 
-          <div className="flex w-full h-full max-h-screen justify-between">
+          <div className="flex w-full h-full max-h-full overflow-hidden justify-between">
             <div className="w-2/3 brightness-40">
               {theme === "light" ? (
                 <Image
