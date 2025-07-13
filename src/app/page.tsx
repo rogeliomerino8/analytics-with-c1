@@ -6,6 +6,7 @@ import { DashboardScreen } from "./components/DashboardScreen";
 import { domAnimation, LazyMotion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "./hooks/useTheme";
+import { NavBar } from "./components/Navbar";
 
 export interface CardInfo {
   text: string; // card prompt
@@ -20,25 +21,29 @@ export default function Home() {
         mode={theme}
         theme={{ defaultChartPalette: ["#4F46E5", "#7F56D9", "#1882FF"] }}
       >
-        <div className="flex w-full h-full max-h-screen justify-between">
-          <div className="w-2/3 brightness-40">
-            {theme === "light" ? (
-              <Image
-                src="/background.svg"
-                alt="background"
-                fill
-                className="object-cover object-left-top"
-              />
-            ) : (
-              <Image
-                src="/background-dark.svg"
-                alt="background"
-                fill
-                className="object-cover object-left-top"
-              />
-            )}
+        <div className="flex flex-col h-full w-full">
+          <NavBar />
+
+          <div className="flex w-full h-full max-h-screen justify-between">
+            <div className="w-2/3 brightness-40">
+              {theme === "light" ? (
+                <Image
+                  src="/background.svg"
+                  alt="background"
+                  fill
+                  className="object-cover object-left-top"
+                />
+              ) : (
+                <Image
+                  src="/background-dark.svg"
+                  alt="background"
+                  fill
+                  className="object-cover object-left-top"
+                />
+              )}
+            </div>
+            <DashboardScreen />
           </div>
-          <DashboardScreen />
         </div>
       </ThemeProvider>
     </LazyMotion>
