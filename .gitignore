@@ -19,6 +19,7 @@
 
 # production
 /build
+/financial-datasets-mcp/tsx
 
 # misc
 .DS_Store

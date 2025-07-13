@@ -1,0 +1,20 @@
+.crayon-card-card {
+  border: none;
+  background: none;
+  background-color: none;
+  padding: 0;
+}
+
+.message-loader-text {
+  color: transparent;
+  background: linear-gradient(
+      135deg,
+      #FFF,
+      #454545,
+      #FFF
+  );
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer 5s linear infinite;
+}

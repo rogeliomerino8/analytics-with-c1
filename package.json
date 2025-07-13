@@ -9,17 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@crayonai/react-ui": "^0.7.10",
+    "@anthropic-ai/sdk": "^0.55.0",
+    "@crayonai/react-core": "^0.7.6",
+    "@crayonai/react-ui": "^0.8.6",
     "@crayonai/stream": "^0.6.4",
     "@google/genai": "^1.0.1",
-    "@thesysai/genui-sdk": "^0.6.15",
+    "@thesysai/genui-sdk": "^0.6.26",
+    "clsx": "^2.1.1",
+    "dotenv": "^16.4.5",
+    "exa-js": "^1.8.19",
+    "framer-motion": "^12.23.0",
     "lucide-react": "^0.469.0",
     "motion": "^12.12.1",
     "next": "15.2.4",
     "openai": "^4.103.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sass": "^1.89.0"
+    "sass": "^1.89.0",
+    "zod": "^3.25.75",
+    "zod-to-json-schema": "^3.24.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
