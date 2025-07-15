@@ -19,6 +19,7 @@
     "dotenv": "^16.4.5",
     "exa-js": "^1.8.19",
     "framer-motion": "^12.23.0",
+    "fuzzball": "^2.2.2",
     "lucide-react": "^0.469.0",
     "motion": "^12.12.1",
     "next": "15.2.4",

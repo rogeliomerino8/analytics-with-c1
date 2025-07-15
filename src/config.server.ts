@@ -2,6 +2,7 @@ import Exa from "exa-js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { getFinancialTools } from "./app/tools/financial";
+import { getFuzzyWebCachedResponse } from "./app/helpers/toolCache";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RunnableFunction = any;
@@ -48,11 +49,18 @@ export const serverConfig: ServerConfig = {
               title: "Searching the web",
               description: "Collecting live insights for broader context",
             });
+
+            const cachedResponse = getFuzzyWebCachedResponse(query);
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+
             const results = await exa.answer(query);
             const modifiedResults = JSON.stringify({
               answer: results.answer,
-              citations: results.citations.map(({ text }) => ({ text })),
+              citations: results.citations.map(({ title, text }) => ({ text: text ?? title })),
             });
+
             return modifiedResults;
           },
         },

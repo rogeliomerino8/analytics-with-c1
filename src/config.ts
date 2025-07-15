@@ -14,7 +14,7 @@ export const config: Config = {
       type: "explain",
     },
     {
-      text: "Investigate Amazon's revenue growth since 2020",
+      text: "Investigate Nvidia's revenue growth since 2020",
       type: "investigate",
     },
     {
