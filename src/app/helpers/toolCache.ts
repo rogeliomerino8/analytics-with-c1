@@ -1,8 +1,8 @@
-import * as fuzz from "fuzzball";
+import { extract, token_set_ratio } from "fuzzball";
 
 export const getFuzzyWebCachedResponse = (query: string): string | null => {
-  const match = fuzz.extract(query, Object.keys(cachedWebSearchResponses), {
-    scorer: fuzz.token_set_ratio,
+  const match = extract(query, Object.keys(cachedWebSearchResponses), {
+    scorer: token_set_ratio,
     returnObjects: true,
     limit: 1,
   })[0];
