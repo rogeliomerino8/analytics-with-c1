@@ -14,7 +14,7 @@
     "@crayonai/react-ui": "^0.8.6",
     "@crayonai/stream": "^0.6.4",
     "@google/genai": "^1.0.1",
-    "@thesysai/genui-sdk": "^0.6.26",
+    "@thesysai/genui-sdk": "^0.6.27",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "exa-js": "^1.8.19",
