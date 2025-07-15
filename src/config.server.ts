@@ -49,7 +49,14 @@ export const serverConfig: ServerConfig = {
               description: "Collecting live insights for broader context",
             });
             const results = await exa.answer(query);
-            return JSON.stringify(results);
+            const modifiedResults = JSON.stringify({
+              answer: results.answer,
+              citations: results.citations.map(({ title, text }) => ({
+                title,
+                text,
+              })),
+            });
+            return modifiedResults;
           },
         },
       },

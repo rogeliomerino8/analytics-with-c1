@@ -14,12 +14,12 @@ export const MessageGroup = ({
   assistantMessage,
 }: MessageGroupProps) => {
   return (
-    <div className="flex flex-col gap-l">
+    <div className="flex flex-col gap-s">
       {queryTitle ? (
-        <div className="text-md text-primary">{queryTitle}</div>
+        <div className="text-xl text-primary font-semibold">{queryTitle}</div>
       ) : (
         userMessage && (
-          <div className="text-md text-primary">
+          <div className="text-xl text-primary font-semibold">
             {userMessage.message as string}
           </div>
         )

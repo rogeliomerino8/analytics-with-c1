@@ -3,6 +3,12 @@
   background: none;
   background-color: none;
   border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.c1-think-collapsed-title-container {
+  padding-left: 0;
 }
 
 .message-loader-text {
