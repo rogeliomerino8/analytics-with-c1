@@ -51,10 +51,7 @@ export const serverConfig: ServerConfig = {
             const results = await exa.answer(query);
             const modifiedResults = JSON.stringify({
               answer: results.answer,
-              citations: results.citations.map(({ title, text }) => ({
-                title,
-                text,
-              })),
+              citations: results.citations.map(({ text }) => ({ text })),
             });
             return modifiedResults;
           },
