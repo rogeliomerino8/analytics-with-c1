@@ -20,6 +20,7 @@ import {
   get_historical_crypto_prices,
   get_current_crypto_price,
 } from "./toolDefs";
+import { getExactDatasetCachedResponse } from "@/app/helpers/toolCache";
 
 export const getFinancialTools = (
   writeThinkingState: (item: { title: string; description: string }) => void
@@ -33,9 +34,10 @@ export const getFinancialTools = (
     fn: (args: z.infer<z.ZodObject<T>>) => Promise<unknown>,
     thinkingState:
       | { title: string; description: string }
-      | ((
-          args: z.infer<z.ZodObject<T>>
-        ) => { title: string; description: string })
+      | ((args: z.infer<z.ZodObject<T>>) => {
+          title: string;
+          description: string;
+        })
   ) => ({
     type: "function" as const,
     function: {
@@ -53,6 +55,13 @@ export const getFinancialTools = (
             writeThinkingState(state);
             lastThinkingState = state;
           }
+
+          const cachedResponse = getExactDatasetCachedResponse(args);
+
+          if (cachedResponse) {
+            return JSON.stringify(cachedResponse);
+          }
+
           const result = await fn(parsedArgs);
 
           return JSON.stringify(result);

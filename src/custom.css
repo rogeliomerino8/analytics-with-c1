@@ -2,17 +2,18 @@
   border: none;
   background: none;
   background-color: none;
-  padding: 0;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.c1-think-collapsed-title-container {
+  padding-left: 0;
 }
 
 .message-loader-text {
   color: transparent;
-  background: linear-gradient(
-      135deg,
-      #FFF,
-      #454545,
-      #FFF
-  );
+  background: linear-gradient(135deg, #fff, #454545, #fff);
   background-clip: text;
   color: transparent;
   background-size: 200% 100%;
