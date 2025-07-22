@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   const tools = await serverConfig.fetchTools(c1Response.writeThinkItem);
 
   const runToolsResponse = client.beta.chat.completions.runTools({
-    model: "c1/anthropic/claude-sonnet-4/v-20250617",
+    model: "c1/anthropic/claude-3.5-sonnet/v-20250709",
     messages: [
       {
         role: "system",
