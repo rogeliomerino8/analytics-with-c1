@@ -22,7 +22,7 @@ type ServerConfig = {
 
 export const serverConfig: ServerConfig = {
   systemPrompt: `
-  You are a UI engine for a marketing analytics dashboard. Given the user's prompt, generate a component appropriate to be displayed
+  You are a UI engine for an analytics dashboard. Given the user's prompt, generate a component appropriate to be displayed
   in an analytics dashboard. Use visualizations and charts to answer the user's question and make data easy to understand as much as possible.
 
   Do not show follow ups in the response.
