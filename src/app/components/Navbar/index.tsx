@@ -32,7 +32,10 @@ export const NavBar = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -42,7 +45,6 @@ export const NavBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   return (
     <div className="flex items-center justify-between bg-container border border-default px-l py-s">
@@ -59,13 +61,17 @@ export const NavBar = () => {
         ) : (
           <Image src="/thesys-navbar.svg" alt="Thesys" width={32} height={32} />
         )}
-        <span className="font-semibold text-primary">Demos</span> by Thesys /
+        <span className="hidden md:block font-semibold text-primary">
+          Demos
+        </span>{" "}
+        <span className="hidden md:block">by Thesys /</span>
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={toggleDropdown}
             className="flex items-center gap-1 text-primary hover:text-secondary transition-colors cursor-pointer"
           >
             <span>Analytics</span>
+            <span className="block md:hidden text-secondary text-sm"> / by Thesys</span>
             <ChevronDown
               size={16}
               className={`transform transition-transform duration-200 ${
@@ -73,7 +79,7 @@ export const NavBar = () => {
               }`}
             />
           </button>
-          
+
           {isDropdownOpen && (
             <div className="absolute top-full left-0 mt-1 w-48 bg-container border border-default rounded-md shadow-lg z-50">
               <div className="py-1">
@@ -93,7 +99,7 @@ export const NavBar = () => {
           variant="primary"
           size="medium"
           onClick={goToSourceCode}
-          iconLeft={<Github  />}
+          iconLeft={<Github />}
           iconRight={<StarIcon fill="#eac54f" color="#eac54f" />}
         >
           GitHub
