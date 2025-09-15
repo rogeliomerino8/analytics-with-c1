@@ -17,7 +17,7 @@ export const Composer = ({
   const { messages } = useThreadState();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>(
-    messages.length === 0 ? (config.prefilledSuggestions ?? []) : []
+    messages.length === 0 ? config.prefilledSuggestions ?? [] : []
   );
 
   useEffect(() => {

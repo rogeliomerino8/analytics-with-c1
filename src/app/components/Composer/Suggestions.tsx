@@ -25,6 +25,17 @@ export const Suggestions = ({
   const [hovered, setHovered] = useState(false);
   const expanded = !collapsed || hovered;
 
+  const suggestionClickHandler = (queryText: string, queryTitle?: string) => {
+    if (!expanded) {
+      setHovered(true);
+      return;
+    }
+
+    pushQueryTitle(queryTitle ?? queryText);
+    executePrompt(queryText);
+    setHovered(false);
+  };
+
   return (
     <m.div
       className={clsx(
@@ -43,8 +54,7 @@ export const Suggestions = ({
           position={expanded ? 0 : suggestions.length - index - 1}
           total={suggestions.length}
           setHovered={setHovered}
-          executePrompt={executePrompt}
-          pushQueryTitle={pushQueryTitle}
+          suggestionClickHandler={suggestionClickHandler}
         />
       ))}
     </m.div>
@@ -58,8 +68,7 @@ interface SuggestionProps {
   position: number;
   total: number;
   setHovered: (hovered: boolean) => void;
-  executePrompt: (prompt: string) => void;
-  pushQueryTitle: (title: string) => void;
+  suggestionClickHandler: (queryText: string, queryTitle?: string) => void;
 }
 
 const Suggestion = ({
@@ -69,8 +78,7 @@ const Suggestion = ({
   position,
   total,
   setHovered,
-  executePrompt,
-  pushQueryTitle,
+  suggestionClickHandler,
 }: SuggestionProps) => {
   return (
     <div
@@ -83,8 +91,7 @@ const Suggestion = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => {
-        pushQueryTitle(title ?? text);
-        executePrompt(text);
+        suggestionClickHandler(text, title);
       }}
     >
       <div className="flex items-center gap-m">
