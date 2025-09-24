@@ -44,7 +44,9 @@ export const ComposerInput = ({
 }: ComposerInputProps) => {
   const [textContent, setTextContent] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [isTextAreaExpanded, setIsTextAreaExpanded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const composerDisabled: boolean = Boolean(
     fileState.isAtSizeLimit || dragState.isDragging
@@ -58,6 +60,11 @@ export const ComposerInput = ({
     onSubmit(textContent);
     onClearFiles();
     setTextContent("");
+    if (textAreaRef.current) {
+      // reset text area state
+      textAreaRef.current.rows = 1;
+      setIsTextAreaExpanded(false);
+    }
   };
 
   const handleFileInputClick = () => {
@@ -100,15 +107,33 @@ export const ComposerInput = ({
         </p>
       )}
 
-      <div className="flex items-center justify-between gap-s">
-        <input
-          type="text"
+      <div
+        className={clsx(
+          "flex gap-s",
+          !isTextAreaExpanded && "items-center justify-between",
+          isTextAreaExpanded && "flex-col"
+        )}
+      >
+        <textarea
+          ref={textAreaRef}
+          rows={1}
           placeholder="Type here..."
-          className={clsx("flex-1 pl-[8px] outline-none", isFocused && "border-primary")}
+          className={clsx(
+            "flex-1 pl-[8px] outline-none resize-none",
+            isFocused && "border-primary"
+          )}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           value={textContent}
-          onChange={(e) => setTextContent(e.target.value)}
+          onChange={(e) => {
+            const textarea = e.target;
+            const isOverflowing = textarea.scrollHeight > textarea.clientHeight;
+            if (isOverflowing) {
+              textarea.rows = 2;
+              setIsTextAreaExpanded(true);
+            }
+            setTextContent(e.target.value);
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
@@ -116,7 +141,12 @@ export const ComposerInput = ({
             }
           }}
         />
-        <div className="flex items-center gap-2xs">
+        <div
+          className={clsx(
+            "flex items-center gap-2xs",
+            isTextAreaExpanded && "self-end"
+          )}
+        >
           <div className="relative">
             <input
               type="file"
