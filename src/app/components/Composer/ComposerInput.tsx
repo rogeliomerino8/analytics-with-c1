@@ -104,7 +104,7 @@ export const ComposerInput = ({
         <input
           type="text"
           placeholder="Type here..."
-          className={clsx("flex-1 outline-none", isFocused && "border-primary")}
+          className={clsx("flex-1 pl-[8px] outline-none", isFocused && "border-primary")}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           value={textContent}
