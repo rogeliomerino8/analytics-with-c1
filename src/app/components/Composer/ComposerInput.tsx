@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { AttachedFile } from "./AttachedFile";
 import { FileDragState } from "./FileDragState";
 import clsx from "clsx";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface FileState {
   files: File[];
@@ -47,6 +48,7 @@ export const ComposerInput = ({
   const [isTextAreaExpanded, setIsTextAreaExpanded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const isMobile = useIsMobile()
 
   const composerDisabled: boolean = Boolean(
     fileState.isAtSizeLimit || dragState.isDragging
@@ -129,7 +131,7 @@ export const ComposerInput = ({
             const textarea = e.target;
             const isOverflowing = textarea.scrollHeight > textarea.clientHeight;
             if (isOverflowing) {
-              textarea.rows = 4;
+              textarea.rows = isMobile ? 2 : 4;
               setIsTextAreaExpanded(true);
             }
             setTextContent(e.target.value);
