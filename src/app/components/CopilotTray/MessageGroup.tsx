@@ -19,7 +19,7 @@ export const MessageGroup = ({
         <div className="text-xl text-primary font-semibold">{queryTitle}</div>
       ) : (
         userMessage && (
-          <div className="text-xl text-primary font-semibold">
+          <div className="text-xl text-primary font-semibold break-all">
             {userMessage.message as string}
           </div>
         )
