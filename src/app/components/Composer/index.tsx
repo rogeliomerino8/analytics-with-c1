@@ -1,17 +1,19 @@
-import { IconButton } from "@crayonai/react-ui";
-import { ArrowUp, StopCircle } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useThreadActions, useThreadState } from "@crayonai/react-core";
 import { Suggestions, type Suggestion } from "./Suggestions";
 import { AnimatePresence } from "framer-motion";
 import { config } from "@/config";
+import { processSheetFile } from "@/services/sheetProcessor";
+import { ComposerInput } from "./ComposerInput";
+import { useFileDrag } from "@/hooks/useFileDrag";
+import { useFileHandler } from "@/hooks/useFileHandler";
+import type { JSONValue } from "@crayonai/stream";
 
 export const Composer = ({
   pushQueryTitle,
 }: {
   pushQueryTitle: (title: string) => void;
 }) => {
-  const [textContent, setTextContent] = useState("");
   const { processMessage, onCancel } = useThreadActions();
   const { isRunning } = useThreadState();
   const { messages } = useThreadState();
@@ -19,43 +21,47 @@ export const Composer = ({
   const [suggestions, setSuggestions] = useState<Suggestion[]>(
     messages.length === 0 ? config.prefilledSuggestions ?? [] : []
   );
+  const inputContainerRef = useRef<HTMLDivElement>(null);
+
+  const {
+    files,
+    totalFileSize,
+    handleFileChange,
+    handleFilesDropped,
+    removeFile,
+    clearFiles,
+    processFiles,
+    isAtSizeLimit,
+  } = useFileHandler();
+
+  const { isDragging, dragHandlers } = useFileDrag({
+    onFilesDropped: handleFilesDropped,
+  });
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  const handleSubmit = () => {
-    if (!textContent.trim() || isRunning) {
-      return;
-    }
-
-    executePrompt(textContent);
-  };
-
   const executePrompt = async (prompt: string) => {
+    const contexts = await processFiles(async (file) => {
+      const result = await processSheetFile(file);
+      return result.content;
+    });
+
     processMessage({
       type: "prompt",
       role: "user",
       message: prompt,
+      context: contexts.length > 0 ? contexts as JSONValue[] : undefined,
     });
 
-    setTextContent("");
+    clearFiles();
   };
-
-  useLayoutEffect(() => {
-    const input = inputRef.current;
-    if (!input) {
-      return;
-    }
-
-    input.style.height = "0px";
-    input.style.height = `${input.scrollHeight}px`;
-  }, [textContent]);
 
   useEffect(() => {
     if (messages.length === 0) return; // Only show suggestions after an assistant message
 
-    if (isRunning || messages.length % 2 !== 0) {
+    if ((isRunning ?? false) || messages.length % 2 !== 0) {
       setSuggestions([]);
       return;
     }
@@ -103,30 +109,30 @@ export const Composer = ({
             collapsed={messages.length > 0}
             executePrompt={executePrompt}
             pushQueryTitle={pushQueryTitle}
+            inputContainerRef={inputContainerRef}
           />
         )}
       </AnimatePresence>
 
-      <div className="py-xs px-s border border-default rounded-xl flex items-center justify-between gap-s bg-elevated">
-        <input
-          type="text"
-          placeholder="Type here..."
-          className="flex-1 outline-none"
-          value={textContent}
-          onChange={(e) => setTextContent(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-        />
-        <IconButton
-          variant="primary"
-          icon={isRunning ? <StopCircle /> : <ArrowUp />}
-          onClick={isRunning ? onCancel : handleSubmit}
-        />
-      </div>
+      <ComposerInput
+        inputContainerRef={inputContainerRef}
+        onSubmit={executePrompt}
+        isRunning={isRunning}
+        onCancel={onCancel}
+        fileState={{
+          files,
+          totalFileSize,
+          isAtSizeLimit,
+          handleFileChange,
+          handleFilesDropped,
+          removeFile,
+        }}
+        dragState={{
+          isDragging,
+          dragHandlers,
+        }}
+        onClearFiles={clearFiles}
+      />
     </div>
   );
 };

@@ -95,6 +95,7 @@ const config = {
         interactiveElHover: "var(--border-interactive-el-hover)",
         interactiveElSelected: "var(--border-interactive-el-selected)",
         canvasElementSelected: "var(--canvas-element-selected-border)",
+        emphasis: "var(--border-emphasis)",
       },
       spacing: {
         "3xs": "0.125rem",

@@ -44,7 +44,7 @@ export const CopilotTray = () => {
   return (
     <m.div
       className={clsx(
-        "w-full md:w-4/12 h-full max-h-full flex flex-col bg-container overflow-hidden transition-all duration-300",
+        "w-full md:w-5/12 h-full max-h-full flex flex-col bg-container overflow-hidden transition-all duration-300",
         groupedMessages.length === 0 &&
           "border-l border-default border-l-black/4",
         groupedMessages.length > 0 && "md:w-8/12"

@@ -7,8 +7,8 @@ export const WelcomeCard = () => {
       <Image
         src="/agent-image.svg"
         alt="background"
-        width={346}
-        height={346}
+        width={250}
+        height={250}
         className="object-cover object-center max-w-full max-h-full select-none mb-[40%]"
         draggable={false}
       />
