@@ -129,7 +129,7 @@ export const ComposerInput = ({
             const textarea = e.target;
             const isOverflowing = textarea.scrollHeight > textarea.clientHeight;
             if (isOverflowing) {
-              textarea.rows = 2;
+              textarea.rows = 4;
               setIsTextAreaExpanded(true);
             }
             setTextContent(e.target.value);
