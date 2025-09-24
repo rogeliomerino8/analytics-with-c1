@@ -1,6 +1,6 @@
 import { ArrowRight, BadgePercent, TrendingUp, Users } from "lucide-react";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { m } from "framer-motion";
 
 export type Suggestion = {
@@ -14,6 +14,7 @@ interface SuggestionsProps {
   collapsed?: boolean;
   executePrompt: (prompt: string) => void;
   pushQueryTitle: (title: string) => void;
+  inputContainerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export const Suggestions = ({
@@ -21,9 +22,30 @@ export const Suggestions = ({
   collapsed,
   executePrompt,
   pushQueryTitle,
+  inputContainerRef,
 }: SuggestionsProps) => {
   const [hovered, setHovered] = useState(false);
+  const [bottomPosition, setBottomPosition] = useState(125); // fallback percentage
   const expanded = !collapsed || hovered;
+
+  useEffect(() => {
+    if (!inputContainerRef?.current) return;
+
+    const updatePosition = () => {
+      const containerHeight = inputContainerRef.current!.getBoundingClientRect().height;
+      setBottomPosition(containerHeight + 12); // container height + 12px
+    };
+
+    updatePosition();
+
+    // Update position when window resizes or container might change
+    const resizeObserver = new ResizeObserver(updatePosition);
+    resizeObserver.observe(inputContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [inputContainerRef]);
 
   const suggestionClickHandler = (queryText: string, queryTitle?: string) => {
     if (!expanded) {
@@ -39,9 +61,10 @@ export const Suggestions = ({
   return (
     <m.div
       className={clsx(
-        "flex flex-col gap-[4px] absolute bottom-[125%] z-10 w-full pt-l delay-75 transition-all duration-300",
+        "flex flex-col gap-[4px] absolute z-10 w-full pt-l delay-75 transition-all duration-300",
         expanded && "bg-container"
       )}
+      style={{ bottom: `${bottomPosition}px` }}
       initial={{ opacity: 0, display: "none" }}
       animate={{ opacity: 1, display: "flex" }}
       exit={{ opacity: 0, transitionEnd: { display: "none" } }}

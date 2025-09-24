@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     description: "Interpreting your query and querying the datasets",
   });
 
-  const { prompt, threadId, responseId } = (await req.json()) as {
+  const { prompt, threadId, responseId, context } = (await req.json()) as {
     prompt: {
       role: "user";
       content: string;
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     };
     threadId: ThreadId;
     responseId: string;
+    context?: string[];
   };
 
   const client = new OpenAI({
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
       ...(await getLLMThreadMessages(threadId)),
       {
         role: "user",
-        content: prompt.content!,
+        content: attachContextToMessage(prompt, context),
       },
     ],
     stream: true,
@@ -93,3 +94,14 @@ export async function POST(req: NextRequest) {
     },
   });
 }
+
+const attachContextToMessage = (
+  message: { role: "user"; content: string },
+  context?: string[]
+) => {
+  if (context && context.length > 0) {
+    return `${message.content}\n\n${context.join("\n")}`;
+  }
+
+  return message.content;
+};

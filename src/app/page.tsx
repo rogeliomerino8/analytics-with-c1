@@ -32,6 +32,7 @@ export default function Home() {
                   alt="background"
                   fill
                   className="object-cover object-left-top"
+                  priority
                 />
               ) : (
                 <Image
@@ -39,6 +40,7 @@ export default function Home() {
                   alt="background"
                   fill
                   className="object-cover object-left-top"
+                  priority
                 />
               )}
               <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center">
