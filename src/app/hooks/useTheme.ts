@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 
 export const useTheme = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    // Mark as hydrated to prevent hydration mismatch
+    setIsHydrated(true);
+    
     // Check if window and matchMedia are available (for SSR compatibility)
     if (typeof window === 'undefined' || !window.matchMedia) {
       return;
@@ -28,5 +32,6 @@ export const useTheme = () => {
     };
   }, []);
 
-  return theme;
+  // Return 'light' during SSR and before hydration to prevent mismatch
+  return isHydrated ? theme : 'light';
 };
