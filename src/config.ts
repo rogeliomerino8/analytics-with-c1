@@ -10,15 +10,15 @@ type Config = {
 export const config: Config = {
   prefilledSuggestions: [
     {
-      text: "Explain Apple's revenue trend over the past 5 years",
+      text: "Explica la tendencia de ingresos de Apple en los últimos 5 años",
       type: "explain",
     },
     {
-      text: "Investigate Nvidia's revenue growth since 2020",
+      text: "Investiga el crecimiento de ingresos de Nvidia desde 2020",
       type: "investigate",
     },
     {
-      text: "Analyze Tesla's net profit this year",
+      text: "Analiza la ganancia neta de Tesla este año",
       type: "analyze",
     },
   ],

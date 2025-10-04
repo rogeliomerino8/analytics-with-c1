@@ -10,8 +10,8 @@ type ThreadId = string;
 export async function POST(req: NextRequest) {
   const c1Response = makeC1Response();
   c1Response.writeThinkItem({
-    title: "Analyzing Prompt",
-    description: "Interpreting your query and querying the datasets",
+    title: "Analizando Consulta",
+    description: "Interpretando tu pregunta y consultando los conjuntos de datos",
   });
 
   const { prompt, threadId, responseId, context } = (await req.json()) as {
