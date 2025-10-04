@@ -4,6 +4,7 @@ import { addMessages, getLLMThreadMessages } from "@/services/threadService";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 import { serverConfig } from "@/config.server";
 import { makeC1Response } from "@thesysai/genui-sdk/server";
+import { randomUUID } from "crypto";
 
 type ThreadId = string;
 
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
       const id =
         allRunToolsMessages.length - 1 === index // for last message (the response shown to user), use the responseId as provided by the UI
           ? responseId
-          : crypto.randomUUID();
+          : randomUUID();
 
       return {
         ...m,

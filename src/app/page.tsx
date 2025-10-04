@@ -6,7 +6,6 @@ import { DashboardScreen } from "./components/DashboardScreen";
 import { domAnimation, LazyMotion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "./hooks/useTheme";
-import { useState, useEffect } from "react";
 
 export interface CardInfo {
   text: string; // card prompt
@@ -14,31 +13,6 @@ export interface CardInfo {
 
 export default function Home() {
   const theme = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return (
-      <div className="flex flex-col h-full w-full max-h-screen">
-        <div className="flex w-full h-full max-h-full overflow-hidden justify-between">
-          <div className="hidden md:block w-2/3 brightness-40 relative">
-            <Image
-              src="/background.svg"
-              alt="background"
-              fill
-              className="object-cover object-left-top"
-              priority
-            />
-          </div>
-          <DashboardScreen />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <LazyMotion features={domAnimation}>
@@ -69,10 +43,11 @@ export default function Home() {
               <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-center justify-center">
                 <div className="text-white text-center p-8">
                   <h3 className="text-2xl font-bold mb-4">
-                    Vista previa de FiMarket
+                    This is a Preview Screen
                   </h3>
                   <p className="text-lg">
-                   Pregunta todo sobre el mercado financiero
+                    You can ask the agent on the right about U.S. equities or
+                    current market movements
                   </p>
                 </div>
               </div>

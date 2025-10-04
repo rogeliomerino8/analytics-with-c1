@@ -5,7 +5,7 @@ export const useTheme = () => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    // Mark as hydrated to prevent hydration mismatch
+    // Mark as hydrated to avoid SSR/client mismatch
     setIsHydrated(true);
     
     // Check if window and matchMedia are available (for SSR compatibility)
